@@ -8,9 +8,10 @@
     'description': """Business Game""",
     'category': 'Productivity',
     'website': 'https://www.odoo.com/',
-    'depends' : [],
+    'depends' : ['purchase'],
     'data': [
-        ],
+        'security/ir.model.access.csv',
+        'views/start.xml'],
     'demo': [],
     'qweb': [],
     'installable': True,

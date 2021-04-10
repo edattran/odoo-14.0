@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="start_tree" model="ir.ui.view">
+        <field name="name">bgame.start.tree</field>
+        <field name="model">bgame.start</field>
+        <field name="arch" type="xml">
+            <tree create="false">
+                <field name="player_name"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="start_form" model="ir.ui.view">
+        <field name="name">bgame.start.form</field>
+        <field name="model">bgame.start</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="player_name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="start_action" model="ir.actions.act_window">
+        <field name="name">Main Menu</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bgame.start</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Start Game!
+            </p>
+        </field>
+
+
+
+    </record>
+
+
+    <menuitem id="bgame_root"
+              name="Business Game"
+              sequence="1"/>
+
+    <menuitem id="bgame_root_start"
+              name="Start Game"
+              parent="bgame_root"
+              action="start_action"
+              sequence="10"/>
+
+    <menuitem id="bgame_root_purchase"
+              name="Purchase"
+              parent="bgame_root"
+              action="purchase.purchase_rfq"
+              sequence="11"/>
+
+
+
+
+</odoo>
