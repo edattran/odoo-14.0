@@ -5,7 +5,7 @@
         <field name="name">bgame.start.tree</field>
         <field name="model">bgame.start</field>
         <field name="arch" type="xml">
-            <tree create="false">
+            <tree>
                 <field name="player_name"/>
             </tree>
         </field>
@@ -17,8 +17,21 @@
         <field name="model">bgame.start</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="start_game" string="Start Game"
+                        type="object" class="btn-primary"/>
+                </header>
                 <group>
                     <field name="player_name"/>
+                </group>
+                <group>
+                    <field name="database_name"/>
+                </group>
+                <group>
+                    <field name="player_mail"/>
+                </group>
+                <group>
+                    <field name="player_password"/>
                 </group>
             </form>
         </field>
