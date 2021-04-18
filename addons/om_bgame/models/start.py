@@ -11,14 +11,19 @@ class BgameStart(models.Model):
     database_name = fields.Char(string='DB Name', required=True)
     player_mail = fields.Char(string='Mail Address', required=True)
     player_password = fields.Char(string='Password', required=True)
+    spring_url = fields.Char(string='URL Spring Applikation', required=True)
+    odoo_url = fields.Char(string='URL Odoo Instanz', required=True)
     player_status = fields.Char(string="Game Status")
+    player_extern_id = fields.Char(string="External ID")
 
     def start_game(self):
-        url = 'http://localhost:8070/customapi/startGame'
+        url = '/customapi/startGame'
         myobj = {'playerName': self.player_name,
                  'databaseName': self.database_name,
                  'playerMail': self.player_mail,
                  'playerPassword': self.player_password,
+                 'springUrl': self.spring_url,
+                 'odooUrl': self.odoo_url,
                  }
-        reply = requests.post(url, json=myobj)
+        reply = requests.post(self.spring_url+url, json=myobj)
         print(reply)

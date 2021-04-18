@@ -33,6 +33,12 @@
                 <group>
                     <field name="player_password"/>
                 </group>
+                <group>
+                    <field name="spring_url"/>
+                </group>
+                <group>
+                    <field name="odoo_url"/>
+                </group>
             </form>
         </field>
     </record>
