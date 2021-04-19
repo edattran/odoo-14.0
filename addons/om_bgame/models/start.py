@@ -24,6 +24,7 @@ class BgameStart(models.Model):
                  'playerPassword': self.player_password,
                  'springUrl': self.spring_url,
                  'odooUrl': self.odoo_url,
+                 'externalId': self.id,
                  }
         reply = requests.post(self.spring_url+url, json=myobj)
         print(reply)
