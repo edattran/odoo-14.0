@@ -11,7 +11,8 @@
     'depends' : ['purchase'],
     'data': [
         'security/ir.model.access.csv',
-        'views/start.xml'],
+        'views/start.xml',
+        'views/purchase.xml'],
     'demo': [],
     'qweb': [],
     'installable': True,
