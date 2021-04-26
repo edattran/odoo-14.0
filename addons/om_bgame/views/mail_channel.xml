@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="mail.channel" id="mail.channel_bgame_all_employees">
+        <field name="name">BGame</field>
+        <field name="group_ids" eval="[(4, ref('mail.channel_all_employees'))]"/>
+        <field name="description">BGame Messages</field>
+    </record>
+
+
+
+
+</odoo>
