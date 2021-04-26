@@ -77,6 +77,12 @@
               action="purchase.purchase_rfq"
               sequence="11"/>
 
+    <menuitem id="bgame_root_production"
+              name="Manufacturing"
+              parent="bgame_root"
+              action="mrp.mrp_production_action"
+              sequence="11"/>
+
 
 
 

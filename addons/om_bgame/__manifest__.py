@@ -12,7 +12,8 @@
     'data': [
         'security/ir.model.access.csv',
         'views/start.xml',
-        'views/purchase.xml'
+        'views/purchase.xml',
+        'views/mrp_production.xml'
         ],
     'demo': [],
     'qweb': [],

@@ -14,6 +14,8 @@ class PurchaseOrder(models.Model):
             vname = 'greatProtein'
         elif suplier_name == "Super Sweet":
             vname = 'superSweet'
+        elif suplier_name == "Choco Loco":
+            vname = 'chocoLoco'
         url = '/customapi/' + vname + '/newOrder'
         line = self.env['purchase.order.line'].browse(self.id)
         start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
@@ -29,11 +31,6 @@ class PurchaseOrder(models.Model):
         for order in self:
             order.write({'state': 'sent'})
         print(reply)
-
-    def notify(self):
-        self.button_confirm()
-        print('fuck')
-        return True
 
     def button_confirm(self):
         for order in self:
