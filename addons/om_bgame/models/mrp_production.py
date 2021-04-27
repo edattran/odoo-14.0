@@ -8,9 +8,32 @@ class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
     def production_confirm(self):
+        start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
+        url = '/customapi/manufacturer/newMaOrder'
         products = self.env['stock.move.line'].search_count([('reference', '=', self.name)])
+        stock = self.env['stock.move.line'].search([('reference', '=', self.name)])
+        object_int1 = int(stock[0].product_id)
+        product1_name = self.env['product.template'].search([('id', '=', object_int1)])
+        pqty1 = stock[0].product_qty
+        object_int2 = int(stock[1].product_id)
+        product2_name = self.env['product.template'].search([('id', '=', object_int2)])
+        pqty2 = stock[1].product_qty
+        object_int3 = int(stock[2].product_id)
+        product3_name = self.env['product.template'].search([('id', '=', object_int3)])
+        pqty3 = stock[2].product_qty
         if products >= 3:
-            print(requests)
+            myobj = {'id': self.name,
+                     'product1': product1_name.name,
+                     'qtyP1': pqty1,
+                     'product2': product2_name.name,
+                     'qtyP2': pqty2,
+                     'product3': product3_name.name,
+                     'qtyP3': pqty3,
+                     'start:': {
+                         'id': start_game.player_extern_id,
+                     }}
+            reply = requests.post(start_game.spring_url + url, json=myobj)
+            print(start_game.player_extern_id)
         self.env.user.notify_warning(message='Not enogh goods to produce')
         return True
 
