@@ -11,6 +11,9 @@ class MrpProduction(models.Model):
         start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
         url = '/customapi/manufacturer/newMaOrder'
         products = self.env['stock.move.line'].search_count([('reference', '=', self.name)])
+        if products == 0:
+            self.env.user.notify_danger(message='Check availability!')
+            return True
         stock = self.env['stock.move.line'].search([('reference', '=', self.name)])
         object_int1 = int(stock[0].product_id)
         product1_name = self.env['product.template'].search([('id', '=', object_int1)])
@@ -29,16 +32,23 @@ class MrpProduction(models.Model):
                      'qtyP2': pqty2,
                      'product3': product3_name.name,
                      'qtyP3': pqty3,
-                     'start:': {
-                         'id': start_game.player_extern_id,
-                     }}
+                     'manufacturer': {
+                         'start': {
+                             'id': start_game.player_extern_id
+                         }
+                     }
+                     }
             reply = requests.post(start_game.spring_url + url, json=myobj)
-            print(start_game.player_extern_id)
-        self.env.user.notify_warning(message='Not enogh goods to produce')
+        else:
+            self.env.user.notify_warning(message='Not enogh goods to produce')
+        return True
+
+    def set_progress(self):
+        self.write({'state': 'progress'})
         return True
 
     def button_mark_done(self):
-        if (self.state == 'progress'):
+        if self.state == "progress" or self.state == "to_close":
             self._button_mark_done_sanity_checks()
 
             if not self.env.context.get('button_mark_done_production_ids'):
@@ -115,7 +125,4 @@ class MrpProduction(models.Model):
                     'view_mode': 'tree,form',
                 })
             return action
-
-
-
 

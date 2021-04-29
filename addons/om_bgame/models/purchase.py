@@ -34,7 +34,7 @@ class PurchaseOrder(models.Model):
 
     def button_confirm(self):
         for order in self:
-            if order.state not in ['draft', 'sent']:
+            if order.state not in ['sent']:
                 continue
             order._add_supplier_to_product()
             # Deal with double validation process

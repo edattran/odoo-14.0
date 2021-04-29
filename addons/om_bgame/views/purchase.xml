@@ -15,7 +15,7 @@
                 <button name="button_confirm" states="none" type="object"/>
             </button>
             <button name="button_confirm" position="before">
-                <button name="send_quotation" string="Send over Rest" type="object" class="oe_highlight"/>
+                <button name="send_quotation" string="Send over Rest" type="object" class="oe_highlight" states="draft"/>
             </button>
         </field>
     </record>
