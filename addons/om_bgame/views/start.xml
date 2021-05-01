@@ -79,7 +79,13 @@
               name="Manufacturing"
               parent="bgame_root"
               action="mrp.mrp_production_action"
-              sequence="11"/>
+              sequence="12"/>
+
+    <menuitem id="bgame_root_sale"
+              name="Sale"
+              parent="bgame_root"
+              action="sale.action_quotations_with_onboarding"
+              sequence="13"/>
 
 
 

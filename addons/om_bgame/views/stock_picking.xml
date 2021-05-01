@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock_picking_form_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <button name="action_assign" position="before">
+                <button name="send_delivery" string="Deliver over Rest" type="object" class="oe_highlight"/>                       states="draft"/>
+            </button>
+
+            <button name="do_print_picking" position="replace">
+                <button name="do_print_picking" states="none"/>
+            </button>
+            <button name="button_scrap" position="replace">
+                <button name="button_scrap" states="none"/>
+            </button>
+            <button name="action_toggle_is_locked" position="replace">
+                <button name="action_toggle_is_locked" states="none"/>
+            </button>
+        </field>
+    </record>
+</odoo>

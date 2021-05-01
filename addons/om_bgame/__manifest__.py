@@ -8,12 +8,14 @@
     'description': """Business Game""",
     'category': 'Productivity',
     'website': 'https://www.odoo.com/',
-    'depends' : ['purchase'],
+    'depends' : ['purchase', 'mrp', 'sale', 'stock'],
     'data': [
         'security/ir.model.access.csv',
         'views/start.xml',
         'views/purchase.xml',
-        'views/mrp_production.xml'
+        'views/mrp_production.xml',
+        'views/sale.xml',
+        'views/stock_picking.xml'
         ],
     'demo': [],
     'qweb': [],

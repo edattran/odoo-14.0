@@ -25,7 +25,7 @@ class MrpProduction(models.Model):
         product3_name = self.env['product.template'].search([('id', '=', object_int3)])
         pqty3 = stock[2].product_qty
         if products >= 3:
-            myobj = {'id': self.name,
+            myobj = {'name': self.name,
                      'product1': product1_name.name,
                      'qtyP1': pqty1,
                      'product2': product2_name.name,

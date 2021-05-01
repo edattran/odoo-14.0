@@ -19,7 +19,7 @@ class PurchaseOrder(models.Model):
         url = '/customapi/' + vname + '/newOrder'
         line = self.env['purchase.order.line'].browse(self.id)
         start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
-        myobj = {'id': self.name,
+        myobj = {'name': self.name,
                  'reqQty': line.product_qty,
                  vname: {
                      'productName': line.name,
