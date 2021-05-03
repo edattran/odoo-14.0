@@ -16,6 +16,9 @@ class PurchaseOrder(models.Model):
             vname = 'superSweet'
         elif suplier_name == "Choco Loco":
             vname = 'chocoLoco'
+        else:
+            self.env.user.notify_danger(message='Check Vendor!')
+            return True
         url = '/customapi/' + vname + '/newOrder'
         line = self.env['purchase.order.line'].browse(self.id)
         start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
