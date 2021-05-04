@@ -28,6 +28,8 @@ class PickingType(models.Model):
                 cname = 'greatProtein'
             elif _name == 'Choco Loco':
                 cname = 'chocoLoco'
+            elif _name == 'Healthy Nutrition':
+                cname = 'healthyNutrition'
             url = '/customapi/' + cname + '/deliver'
 
             start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])

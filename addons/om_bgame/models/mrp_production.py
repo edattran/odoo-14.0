@@ -6,13 +6,14 @@ import time
 
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
+    bgame_status = fields.Char(string='Status')
 
     def production_confirm(self):
         start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
         url = '/customapi/manufacturer/newMaOrder'
         products = self.env['stock.move.line'].search_count([('reference', '=', self.name)])
-        if products == 0:
-            self.env.user.notify_danger(message='Check availability!')
+        if products < 3:
+            self.env.user.notify_danger(message='Check product availability!')
             return True
         stock = self.env['stock.move.line'].search([('reference', '=', self.name)])
         object_int1 = int(stock[0].product_id)
@@ -24,7 +25,7 @@ class MrpProduction(models.Model):
         object_int3 = int(stock[2].product_id)
         product3_name = self.env['product.template'].search([('id', '=', object_int3)])
         pqty3 = stock[2].product_qty
-        if products >= 3:
+        if products == 3:
             myobj = {'name': self.name,
                      'product1': product1_name.name,
                      'qtyP1': pqty1,
@@ -40,15 +41,33 @@ class MrpProduction(models.Model):
                      }
             reply = requests.post(start_game.spring_url + url, json=myobj)
         else:
-            self.env.user.notify_warning(message='Not enogh goods to produce')
+            self.env.user.notify_warning(message='Check Products!')
         return True
 
     def set_progress(self):
         self.write({'state': 'progress'})
         return True
 
+    def set_done(self):
+        vals = {
+            'bgame_status': 'True'
+        }
+        self.write(vals)
+        self.button_mark_done()
+        return True
+
     def button_mark_done(self):
-        if self.state == "progress" or self.state == "to_close":
+        if self.bgame_status == 'True':
+            stock = self.env['stock.move.line'].search([('reference', '=', self.name)])
+            vals = {
+                'qty_done': stock[0].product_uom_qty
+            }
+            for s in stock:
+                s.write(vals)
+            vals2 = {
+                'qty_producing': self.product_qty
+            }
+            self.write(vals2)
             self._button_mark_done_sanity_checks()
 
             if not self.env.context.get('button_mark_done_production_ids'):
@@ -71,13 +90,16 @@ class MrpProduction(models.Model):
             backorders = productions_to_backorder._generate_backorder_productions()
 
             # if completed products make other confirmed/partially_available moves available, assign them
-            done_move_finished_ids = (productions_to_backorder.move_finished_ids | productions_not_to_backorder.move_finished_ids).filtered(lambda m: m.state == 'done')
+            done_move_finished_ids = (
+                    productions_to_backorder.move_finished_ids | productions_not_to_backorder.move_finished_ids).filtered(
+                lambda m: m.state == 'done')
             done_move_finished_ids._trigger_assign()
 
             # Moves without quantity done are not posted => set them as done instead of canceling. In
             # case the user edits the MO later on and sets some consumed quantity on those, we do not
             # want the move lines to be canceled.
-            (productions_not_to_backorder.move_raw_ids | productions_not_to_backorder.move_finished_ids).filtered(lambda x: x.state not in ('done', 'cancel')).write({
+            (productions_not_to_backorder.move_raw_ids | productions_not_to_backorder.move_finished_ids).filtered(
+                lambda x: x.state not in ('done', 'cancel')).write({
                 'state': 'done',
                 'product_uom_qty': 0.0,
             })
@@ -125,4 +147,3 @@ class MrpProduction(models.Model):
                     'view_mode': 'tree,form',
                 })
             return action
-

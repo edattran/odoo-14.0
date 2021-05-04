@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
             <button name="action_assign" position="before">
-                <button name="send_delivery" string="Deliver over Rest" type="object" class="oe_highlight" states="assigned"/>
+                <button name="send_delivery" string="Receive/Deliver over Rest" type="object" class="oe_highlight" states="assigned"/>
             </button>
             <button name="button_validate" position="replace">
                 <button name="button_validate" states="none"/>

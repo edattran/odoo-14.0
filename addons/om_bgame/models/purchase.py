@@ -16,6 +16,8 @@ class PurchaseOrder(models.Model):
             vname = 'superSweet'
         elif suplier_name == "Choco Loco":
             vname = 'chocoLoco'
+        elif suplier_name == "Healthy Nutrition":
+            vname = 'healthyNutrition'
         else:
             self.env.user.notify_danger(message='Check Vendor!')
             return True
