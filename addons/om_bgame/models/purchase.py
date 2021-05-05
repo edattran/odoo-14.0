@@ -26,6 +26,7 @@ class PurchaseOrder(models.Model):
         start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
         myobj = {'name': self.name,
                  'reqQty': line.product_qty,
+                 'reqPrice': self.amount_total,
                  vname: {
                      'productName': line.name,
                      'start': {
