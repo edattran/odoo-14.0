@@ -22,6 +22,8 @@ class PickingType(models.Model):
                 cname = 'powerStore'
             elif _name == "Nature Store":
                 cname = 'natureStore'
+            elif _name == "Vegan Store":
+                cname = 'veganStore'
             elif _name == 'Super Sweet':
                 cname = 'superSweet'
             elif _name == 'Great Protein':

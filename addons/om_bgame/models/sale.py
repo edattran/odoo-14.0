@@ -16,11 +16,14 @@ class PurchaseOrder(models.Model):
             cname = 'powerStore'
         elif customer_name == "Nature Store":
             cname = 'natureStore'
+        elif customer_name == "Vegan Store":
+            cname = 'veganStore'
         url = '/customapi/' + cname + '/newOrder'
         line = self.env['sale.order.line'].browse(self.id)
         start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
         myobj = {'name': self.name,
                  'reqQty': line.product_uom_qty,
+                 'reqPrice': self.amount_untaxed,
                  cname: {
                      'productName': line.name,
                      'start': {
