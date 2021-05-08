@@ -29,8 +29,5 @@ class BgameStart(models.Model):
         reply = requests.post(self.spring_url + url, json=myobj)
         print(reply)
 
-    def test(self):
-        user = self.env['res.partner'].search([('name', '=', 'Administrator')])
-        self.env.user.notify_success(message='This is a Test Message')
 
 
