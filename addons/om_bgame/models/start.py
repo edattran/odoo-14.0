@@ -29,5 +29,15 @@ class BgameStart(models.Model):
         reply = requests.post(self.spring_url + url, json=myobj)
         print(reply)
 
+    def initialize_game(self):
+        # self.env['product.product'].create({'name': 'Test product2',
+        #                                     'type': 'product',
+        #                                     'list_price': '1',
+        #                                     'sale_ok': 'false',
+        #                                     'purchase_ok': 'true'
+        #                                     })
+
+        self.env['mrp.bom'].create({'product_qty': '42'})
+
 
 
