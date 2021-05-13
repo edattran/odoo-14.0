@@ -44,8 +44,7 @@ class PickingType(models.Model):
                              'id': start_game.player_extern_id
                          }
                      }}
-            reply = requests.post(start_game.spring_url + url, json=myobj)
-            print(reply)
+            requests.post(start_game.spring_url + url, json=myobj)
             return True
         else:
             str = "% s" % req_qty.product_qty

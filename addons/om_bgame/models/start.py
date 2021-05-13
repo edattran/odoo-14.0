@@ -26,8 +26,7 @@ class BgameStart(models.Model):
                  'odooUrl': self.odoo_url,
                  'externalId': self.id,
                  }
-        reply = requests.post(self.spring_url + url, json=myobj)
-        print(reply)
+        requests.post(self.spring_url + url, json=myobj)
 
     def initialize_game(self):
         product1 = self.env['product.product'].create({'name': 'Aspartame',
@@ -127,10 +126,10 @@ class BgameStart(models.Model):
                                          'bom_id': bom2.id})
 
         customer1 = self.env['res.partner'].create({'name': 'Protein Store',
-                                                  'display_name': 'Protein Store'})
+                                                    'display_name': 'Protein Store'})
         customer2 = self.env['res.partner'].create({'name': 'Power Store',
                                                     'display_name': 'Power Store'})
         customer3 = self.env['res.partner'].create({'name': 'Nature Store',
                                                     'display_name': 'Nature Store'})
-        customer4 = self.env['res.partner'].create({'name': 'Healty Vegan Store',
-                                                    'display_name': 'Healty Vegan Store'})
+        customer4 = self.env['res.partner'].create({'name': 'Vegan Store',
+                                                    'display_name': 'Vegan Store'})

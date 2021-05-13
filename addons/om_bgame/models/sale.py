@@ -30,10 +30,9 @@ class PurchaseOrder(models.Model):
                          'id': start_game.player_extern_id
                      }
                  }}
-        reply = requests.post(start_game.spring_url + url, json=myobj)
+        requests.post(start_game.spring_url + url, json=myobj)
         for order in self:
             order.write({'state': 'sent'})
-        print(reply)
         return True
 
     def action_confirm(self):

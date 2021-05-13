@@ -39,7 +39,7 @@ class MrpProduction(models.Model):
                          }
                      }
                      }
-            reply = requests.post(start_game.spring_url + url, json=myobj)
+            requests.post(start_game.spring_url + url, json=myobj)
         else:
             self.env.user.notify_warning(message='Check Products!')
         return True

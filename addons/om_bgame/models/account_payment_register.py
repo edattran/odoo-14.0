@@ -29,7 +29,6 @@ class AccountPaymentRegister(models.TransientModel):
 
         start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
         order = self.env['account.move'].search([('name', '=', self.communication)])
-        print(order.invoice_origin)
         myobj = {'name': order.invoice_origin,
                  cname: {
                      'start': {
@@ -37,8 +36,7 @@ class AccountPaymentRegister(models.TransientModel):
                      }
                  }
                  }
-        reply = requests.post(start_game.spring_url + url, json=myobj)
-        print(reply)
+        requests.post(start_game.spring_url + url, json=myobj)
         payments = self._create_payments()
 
         if self._context.get('dont_redirect_to_payments'):
