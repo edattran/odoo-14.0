@@ -19,7 +19,6 @@
             <form>
                 <header>
                     <button name="start_game" string="Start Game" type="object" class="btn-primary"/>
-                    <button name="initialize_game" string="Initialize" type="object" class="btn-primary"/>
                 </header>
                 <group>
                     <field name="player_name"/>

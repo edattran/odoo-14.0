@@ -17,18 +17,13 @@ class BgameStart(models.Model):
     player_extern_id = fields.Char(string="External ID")
 
     def start_game(self):
-        url = '/customapi/startGame'
-        myobj = {'playerName': self.player_name,
-                 'databaseName': self.database_name,
-                 'playerMail': self.player_mail,
-                 'playerPassword': self.player_password,
-                 'springUrl': self.spring_url,
-                 'odooUrl': self.odoo_url,
-                 'externalId': self.id,
-                 }
-        requests.post(self.spring_url + url, json=myobj)
-
-    def initialize_game(self):
+        status = self.player_status
+        if status == "active":
+            self.env.user.notify_warning(message='Game is already running!')
+            return True
+        if status == "finished":
+            self.env.user.notify_warning(message='Game already finished, please create a new DB!')
+            return True
         product1 = self.env['product.product'].create({'name': 'Aspartame',
                                                        'type': 'product',
                                                        'list_price': '1',
@@ -133,3 +128,14 @@ class BgameStart(models.Model):
                                                     'display_name': 'Nature Store'})
         customer4 = self.env['res.partner'].create({'name': 'Vegan Store',
                                                     'display_name': 'Vegan Store'})
+        url = '/customapi/startGame'
+        myobj = {'playerName': self.player_name,
+                 'databaseName': self.database_name,
+                 'playerMail': self.player_mail,
+                 'playerPassword': self.player_password,
+                 'springUrl': self.spring_url,
+                 'odooUrl': self.odoo_url,
+                 'externalId': self.id,
+                 }
+        requests.post(self.spring_url + url, json=myobj)
+
