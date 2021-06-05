@@ -7,9 +7,11 @@ import time
 class PurchaseOrder(models.Model):
     _inherit = 'sale.order'
 
+    # Function to send quotation over rest
     def send_quotation(self):
         customer_name = self.partner_id.name
         cname = ''
+        # Rename customer for rest url
         if customer_name == "Protein Store":
             cname = 'proteinStore'
         elif customer_name == "Power Store":
@@ -18,6 +20,7 @@ class PurchaseOrder(models.Model):
             cname = 'natureStore'
         elif customer_name == "Vegan Store":
             cname = 'veganStore'
+        # Send over rest
         url = '/customapi/' + cname + '/newOrder'
         line = self.env['sale.order.line'].browse(self.id)
         start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
@@ -31,12 +34,16 @@ class PurchaseOrder(models.Model):
                      }
                  }}
         requests.post(start_game.spring_url + url, json=myobj)
+        # Set status to sent
         for order in self:
             order.write({'state': 'sent'})
         return True
 
+    # Inherited function from sale.py
     def action_confirm(self):
+        # Added if condition to check order status before set order status to done
         if self.state == 'sent':
+            # Odoo default, nothing changed from here...
             if self._get_forbidden_state_confirm() & set(self.mapped('state')):
                 raise UserError(_(
                     'It is not allowed to confirm an order in the following states: %s'

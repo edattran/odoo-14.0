@@ -6,9 +6,12 @@ import requests
 class AccountPaymentRegister(models.TransientModel):
     _inherit = 'account.payment.register'
 
+    # Inherited function from account_payment_register.py
+    # Used to register payments (sale + purchase)
     def action_create_payments(self):
         _name = self.partner_id.name
         cname = ''
+        # Rename vendor + customer for url to send over rest
         if _name == "Protein Store":
             cname = 'proteinStore'
         elif _name == "Power Store":
@@ -25,8 +28,8 @@ class AccountPaymentRegister(models.TransientModel):
             cname = 'chocoLoco'
         elif _name == 'Healthy Nutrition':
             cname = 'healthyNutrition'
+        # Send over rest
         url = '/customapi/' + cname + '/payment'
-
         start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
         order = self.env['account.move'].search([('name', '=', self.communication)])
         myobj = {'name': order.invoice_origin,
@@ -37,6 +40,7 @@ class AccountPaymentRegister(models.TransientModel):
                  }
                  }
         requests.post(start_game.spring_url + url, json=myobj)
+        # From here odoo default - nothing changed
         payments = self._create_payments()
 
         if self._context.get('dont_redirect_to_payments'):

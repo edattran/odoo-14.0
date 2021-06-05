@@ -6,15 +6,19 @@ import time
 
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
+    # Added field for workaround to prohibit player to set status 'done' manually
     bgame_status = fields.Char(string='Status')
 
+    # Function to send manufacturing order over rest
     def production_confirm(self):
         start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
         url = '/customapi/manufacturer/newMaOrder'
+        # Check product availability
         products = self.env['stock.move.line'].search_count([('reference', '=', self.name)])
         if products < 3:
             self.env.user.notify_danger(message='Check product availability!')
             return True
+        # Check product and quantity to send it over rest
         stock = self.env['stock.move.line'].search([('reference', '=', self.name)])
         object_int1 = int(stock[0].product_id)
         product1_name = self.env['product.template'].search([('id', '=', object_int1)])
@@ -25,6 +29,7 @@ class MrpProduction(models.Model):
         object_int3 = int(stock[2].product_id)
         product3_name = self.env['product.template'].search([('id', '=', object_int3)])
         pqty3 = stock[2].product_qty
+        # Second product availability check
         if products == 3:
             myobj = {'name': self.name,
                      'product1': product1_name.name,
@@ -41,13 +46,16 @@ class MrpProduction(models.Model):
                      }
             requests.post(start_game.spring_url + url, json=myobj)
         else:
+            # Notification to the player if quantity check failed
             self.env.user.notify_warning(message='Check Products!')
         return True
 
+    # Function to set status to progress (Used over XML-RPC)
     def set_progress(self):
         self.write({'state': 'progress'})
         return True
 
+    # Function as workaround to prohibit player to set status 'done' manually (Used over XML-RPC)
     def set_done(self):
         vals = {
             'bgame_status': 'True'
@@ -56,6 +64,8 @@ class MrpProduction(models.Model):
         self.button_mark_done()
         return True
 
+    # Inherited from mrp_production.py
+    # Function changed to set status 'done' over XML-RPC and function set_done considered
     def button_mark_done(self):
         if self.bgame_status == 'True':
             stock = self.env['stock.move.line'].search([('reference', '=', self.name)])
@@ -68,6 +78,7 @@ class MrpProduction(models.Model):
                 'qty_producing': self.product_qty
             }
             self.write(vals2)
+            # From here odoo default - nothing changed
             self._button_mark_done_sanity_checks()
 
             if not self.env.context.get('button_mark_done_production_ids'):

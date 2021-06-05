@@ -7,9 +7,11 @@ import time
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
+    # Function to send quotation over rest
     def send_quotation(self):
         suplier_name = self.partner_id.name
         vname = ''
+        # Rename vendor for rest url
         if suplier_name == "Great Protein":
             vname = 'greatProtein'
         elif suplier_name == "Super Sweet":
@@ -19,8 +21,10 @@ class PurchaseOrder(models.Model):
         elif suplier_name == "Healthy Nutrition":
             vname = 'healthyNutrition'
         else:
+            # Notification for the player if vendor is false
             self.env.user.notify_danger(message='Check Vendor!')
             return True
+        # Send over rest
         url = '/customapi/' + vname + '/newOrder'
         line = self.env['purchase.order.line'].browse(self.id)
         start_game = self.env['bgame.start'].search([('player_status', '=', 'active')])
@@ -34,12 +38,15 @@ class PurchaseOrder(models.Model):
                      }
                  }}
         requests.post(start_game.spring_url + url, json=myobj)
+        # Set status to sent
         for order in self:
             order.write({'state': 'sent'})
 
-
+    # Inherited function from purchase.sy
+    # Status check changed
     def button_confirm(self):
         for order in self:
+            # Status check changed from the default - 'draft' deleted
             if order.state not in ['sent']:
                 continue
             order._add_supplier_to_product()
@@ -52,6 +59,8 @@ class PurchaseOrder(models.Model):
                 order.message_subscribe([order.partner_id.id])
         return True
 
+    # Inherited function from purchase.py
+    # Return True added
     def button_cancel(self):
         for order in self:
             for inv in order.invoice_ids:
